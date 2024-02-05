@@ -17,8 +17,10 @@ shiftsArray = [
         
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)
-    personCapacity = models.IntegerField(null = False)
-    tablesCapacity = models.IntegerField(null = False)
+    address =  models.CharField(max_length=255)
+    img_URL = models.CharField(max_length=1000)
+    personCapacity = models.IntegerField()
+    tablesCapacity = models.IntegerField()
 
     def __str__(self):
         return self.name   
@@ -35,14 +37,20 @@ class Restaurant(models.Model):
     
     def serialize (self):
         shifts = self.shifts.all()
+        reservations = self.reservations.all()
         shiftsIDS = []
+        reservations_Ids = []
         for shift in shifts:
             shiftsIDS.append(shift.id)
+        for reservation in reservations:
+            reservations_Ids.append(reservation.id)
         return {
             "name": self.name,
+            "address": self.address,
+            "img_URL": self.img_URL,
             "personCapacity": self.personCapacity,
             "tablesCapacity": self.tablesCapacity,
-            "isFull": self.isFull,
+            "reservation_Ids": reservations_Ids,
             "shiftsIDS": shiftsIDS
         }
         
@@ -64,6 +72,15 @@ class Shift (models.Model):
             self.tablesCapacity = self.restaurant.tablesCapacity    
         
         super(Shift,self).save(*args, **kwargs)
+    
+    def serialize (self):
+        return {
+            "shiftRange": self.shiftRange,
+            "restaurant": self.restaurant,
+            "perssonCpacity": self.personCapacity,
+            "tableCapacity": self.tablesCapacity,
+            "isFull": self.isFull
+        }
 
 class Reservation(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE, related_name = "reservations")
@@ -89,7 +106,8 @@ class Reservation(models.Model):
             "client": self.client,
             "restaurant": self.restaurant,
             "numberOfDiners": self.numberOfDiners,
-            "shift": self.shift.shiftRange
+            "shift": self.shift.shiftRange,
+            "shift_id": self.shift.id
         }
 
 

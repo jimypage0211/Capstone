@@ -1,0 +1,19 @@
+{% extends "reservations/layout.html" %}
+{% load static %}
+
+{% block body %} 
+    <h1>{{restaurant.name}}</h1>    
+    <form action="/reserve/{{restaurant.id}}" method="post">
+        {% csrf_token %}
+        <label for="numberOfDiners">Number of diners</label>
+        <input type="number" name="numberOfDiners">
+        <label for="Time"></label>
+        <input type="time" name="time">
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}
+
+{% block script %}
+    <script src=""></script>
+{% endblock %}
+

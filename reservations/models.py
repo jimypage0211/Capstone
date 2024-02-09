@@ -1,18 +1,19 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+import math
 
 
 class User(AbstractUser):    
     pass
         
 shiftsArray = [
-    "10AM - 12PM",
-    "12PM - 2PM",
-    "2PM - 4PM",
-    "4PM - 6PM",
-    "6PM - 8PM",
-    "8PM - 10PM",
-    "10PM - 12AM"
+    "10:00 - 12:00",
+    "12:00 - 14:00",
+    "14:00 - 16:00",
+    "16:00 - 18:00",
+    "18:00 - 20:00",
+    "20:00 - 22:00",
+    "22:00 - 24:00"
 ]
         
 class Restaurant(models.Model):
@@ -35,28 +36,24 @@ class Restaurant(models.Model):
             shiftToSave.save()
 
     
-    def serialize (self):
-        shifts = self.shifts.all()
-        reservations = self.reservations.all()
-        shiftsIDS = []
-        reservations_Ids = []
-        for shift in shifts:
-            shiftsIDS.append(shift.id)
+    def serialize (self):        
+        reservations = self.reservations.all()        
+        reservations_Ids = []        
         for reservation in reservations:
             reservations_Ids.append(reservation.id)
         return {
+            "id": self.id,
             "name": self.name,
             "address": self.address,
             "img_URL": self.img_URL,
             "personCapacity": self.personCapacity,
             "tablesCapacity": self.tablesCapacity,
-            "reservation_Ids": reservations_Ids,
-            "shiftsIDS": shiftsIDS
+            "reservations_Ids": reservations_Ids,
         }
         
         
 class Shift (models.Model):    
-    shiftRange = models.CharField(max_length=11)
+    shiftRange = models.CharField(max_length=14)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name= "shifts")   
     personCapacity = models.IntegerField(default = -1)
     tablesCapacity = models.IntegerField(default = -1)
@@ -90,8 +87,8 @@ class Reservation(models.Model):
     
     def save (self, *args, **kwargs):
         shiftToReserve = Shift.objects.get(id = self.shift.id)
-        shiftToReserve.tablesCapacity = shiftToReserve.tablesCapacity -1
         shiftToReserve.personCapacity = shiftToReserve.personCapacity - self.numberOfDiners
+        shiftToReserve.tablesCapacity = shiftToReserve.tablesCapacity - math.ceil(self.numberOfDiners/4)
         if shiftToReserve.tablesCapacity == 0:
             shiftToReserve.isFull = True
         shiftToReserve.save()
@@ -99,7 +96,7 @@ class Reservation(models.Model):
         
 
     def __str__(self):
-        return f"{self.client.email} - {self.restaurant.name}"
+        return f"{self.client.username} - {self.restaurant.name}"
 
     def serialize (self):
         return {

@@ -20,6 +20,7 @@ function loadAll(){
                         <div class="card-body">
                             <h5 class="card-title">${element.name}</h5>
                             <p class="card-text">${element.address}</p>
+                            <a href="/reserve/${element.id}"> Reserve <a/>
                         </div>
                     </div>
                 </div>

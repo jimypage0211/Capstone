@@ -3,6 +3,15 @@
 
 {% block body %} 
     <h1>{{restaurant.name}}</h1>    
+    {% if alert == "Full" %}
+        <div class="alert alert-danger" role="alert">
+            This restaurant has no more tables available
+        </div>
+    {% elif alert == "personFull" %}
+        <div class="alert alert-danger" role="alert">
+            This restaurant has no availability for that many dinners
+        </div>
+    {% endif %}
     <form action="/reserve/{{restaurant.id}}" method="post">
         {% csrf_token %}
         <label for="numberOfDiners">Number of diners</label>

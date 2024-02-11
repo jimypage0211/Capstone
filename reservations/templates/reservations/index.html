@@ -2,6 +2,11 @@
 {% load static %}
 
 {% block body %} 
+    {% if alert == "Reservation success" %}
+    <div class="alert alert-success" role="alert">
+        Your reservation was booked succesfully!
+    </div>
+    {% endif %}
     <h1>Restaurants</h1>
     <div id="allRestaurants" class="row">
         

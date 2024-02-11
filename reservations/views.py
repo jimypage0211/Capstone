@@ -18,7 +18,6 @@ def index(request):
 
 def reserve(request, id):
     # If request is GET means the user is filling the reservation form
-    print(request.user.email)
     if request.method == "GET":
         if request.user.is_authenticated:
             restaurant = Restaurant.objects.get(id=id)
@@ -79,8 +78,8 @@ def reserve(request, id):
                         fail_silently=False,
                     )
                     break
-        return HttpResponse(True)
-        numberOfDiners = request.POST["numberOfDiners"]
+        #If reservation can be booked succesfully return t the restaurant page with a success alert
+        return render(request, "reservations/index.html", {"alert": "Reservation success"})
 
 
 def getAllRestaurants(request):

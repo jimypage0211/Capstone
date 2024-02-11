@@ -33,7 +33,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'jimyprestaurants@gmail.com'
-EMAIL_HOST_PASSWORD = 'bidu pegu vvcj muuz'
+EMAIL_HOST_PASSWORD = 'ioqn tpsu rlyj vvhz'
 
 
 # Application definition

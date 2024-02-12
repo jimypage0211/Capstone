@@ -8,12 +8,16 @@ from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from .models import *
 from django.core.mail import send_mail
+from django.utils.dateparse import parse_datetime
 
 # Create your views here.
 
 
 def index(request):
     return render(request, "reservations/index.html")
+
+def reservations (request):
+    return render(request, "reservations/reservations.html")
 
 
 def reserve(request, id):
@@ -32,10 +36,13 @@ def reserve(request, id):
     else:
         restaurant = Restaurant.objects.get(id=id)
         shifts = Shift.objects.filter(restaurant=restaurant)
-        timeStr = request.POST["time"]
+        # Parsing the datetime form field into a datetime field
+        datetime = parse_datetime(request.POST["time"])
         numberOfDiners = request.POST["numberOfDiners"]
-        # Converting str into time
-        mytime = datetime.strptime(timeStr, "%H:%M").time()
+        # Getting the time only (Time field)
+        mytime = datetime.time()
+        # Converting the time into a string to be able to substring it later to compare to the shiftRange
+        timestr = mytime.strftime('%I:%M %p')
         # Opening and closing times of all restaurants
         min = time(10, 0)
         max = time(22, 0)
@@ -45,7 +52,7 @@ def reserve(request, id):
             for shift in shifts:
                 # converting first 2 digits of the hour to int to check if the time fits into shift range
                 shiftSubs = int(shift.shiftRange[0:2])
-                timeSubs = int(timeStr[0:2])
+                timeSubs = int(timestr[0:2])
                 if shiftSubs == timeSubs or shiftSubs == timeSubs - 1:
                     # Check if shift for that restaurant is full
                     if shift.isFull:
@@ -67,12 +74,13 @@ def reserve(request, id):
                         restaurant=restaurant,
                         numberOfDiners=int(numberOfDiners),
                         shift=shift,
+                        time = datetime
                     )
                     reservationToSave.save()
                     # Send confirmation email
                     send_mail(
                         f"{restaurant.name} Reservation",
-                        f"Your reservation for {restaurant.name} at {timeStr} was succesfully booked",
+                        f"Your reservation for {restaurant.name} at {mytime} was succesfully booked",
                         "jimypRestaurants@gmail.com",
                         [f"{request.user.email}"],
                         fail_silently=False,
@@ -80,11 +88,21 @@ def reserve(request, id):
                     break
         #If reservation can be booked succesfully return t the restaurant page with a success alert
         return render(request, "reservations/index.html", {"alert": "Reservation success"})
+    
+def getReservations(request):
+    if request.method != "GET":
+        return JsonResponse({"error": "GET request required."}, status=400)
+    
+    reservations = request.user.reservations.all()
+    
+    return JsonResponse(
+        [reservation.serialize() for reservation in reservations], safe=False
+    )
 
 
 def getAllRestaurants(request):
     if request.method != "GET":
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({"error": "GET request required."}, status=400)
     restaurants = Restaurant.objects.all()
     return JsonResponse(
         [restaurant.serialize() for restaurant in restaurants], safe=False

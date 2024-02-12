@@ -1,0 +1,13 @@
+{% extends "reservations/layout.html" %}
+{% load static %}
+
+{% block body %} 
+<h1>My Reservations</h1>
+<div id="reservations" class="list-group-item">
+
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'reservations/reservations.js' %}"></script>
+{% endblock %}

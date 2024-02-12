@@ -84,6 +84,9 @@ class Reservation(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name = "reservations")
     numberOfDiners = models.IntegerField()
     shift = models.ForeignKey(Shift, on_delete=models.CASCADE, related_name = "reservations")
+    time = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default = True)
     
     def save (self, *args, **kwargs):
         shiftToReserve = Shift.objects.get(id = self.shift.id)
@@ -100,11 +103,13 @@ class Reservation(models.Model):
 
     def serialize (self):
         return {
-            "client": self.client,
-            "restaurant": self.restaurant,
+            "id": self.id,
+            "restaurant_name": self.restaurant.name,
             "numberOfDiners": self.numberOfDiners,
             "shift": self.shift.shiftRange,
-            "shift_id": self.shift.id
+            "time": self.time.strftime("%b %d, %Y, %I:%M %p"),
+            "active": self.active,
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
         }
 
 

@@ -1,4 +1,5 @@
-from datetime import datetime
+
+from django.utils import timezone
 from datetime import time
 import json
 from django.urls import reverse
@@ -99,9 +100,17 @@ def getReservations(request):
         return JsonResponse({"error": "GET request required."}, status=400)
     
     reservations = request.user.reservations.all()
+    serialized = []
+    for reservation in reservations:
+        reservation_time = reservation.time.time()  
+        current_time = timezone.now().time()
+
+        if reservation_time < current_time:
+            reservation.active = False
+        serialized.append(reservation.serialize())
     
     return JsonResponse(
-        [reservation.serialize() for reservation in reservations], safe=False
+        serialized, safe=False
     )
 
 

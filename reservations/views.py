@@ -1,5 +1,6 @@
 from datetime import datetime
 from datetime import time
+import json
 from django.urls import reverse
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -42,18 +43,22 @@ def reserve(request, id):
         # Getting the time only (Time field)
         mytime = datetime.time()
         # Converting the time into a string to be able to substring it later to compare to the shiftRange
-        timestr = mytime.strftime('%I:%M %p')
+        timestr = mytime.strftime('%H:%M')
         # Opening and closing times of all restaurants
+        
         min = time(10, 0)
         max = time(22, 0)
+        
         # if restaurant is open
         if min <= mytime <= max:
+            
             # look for the shift range based on time entered
             for shift in shifts:
                 # converting first 2 digits of the hour to int to check if the time fits into shift range
                 shiftSubs = int(shift.shiftRange[0:2])
                 timeSubs = int(timestr[0:2])
                 if shiftSubs == timeSubs or shiftSubs == timeSubs - 1:
+                    
                     # Check if shift for that restaurant is full
                     if shift.isFull:
                         return render(
@@ -86,7 +91,7 @@ def reserve(request, id):
                         fail_silently=False,
                     )
                     break
-        #If reservation can be booked succesfully return t the restaurant page with a success alert
+        #If reservation can be booked succesfully return the restaurant page with a success alert
         return render(request, "reservations/index.html", {"alert": "Reservation success"})
     
 def getReservations(request):
@@ -106,6 +111,19 @@ def getAllRestaurants(request):
     restaurants = Restaurant.objects.all()
     return JsonResponse(
         [restaurant.serialize() for restaurant in restaurants], safe=False
+    )
+    
+    
+def cancel(request):
+    data = json.loads(request.body)
+    reservation_id = data.get("id")
+    reservatio_to_delete = Reservation.objects.get(id = reservation_id)
+    reservatio_to_delete.shift.tablesCapacity += math.ceil(reservatio_to_delete.numberOfDiners/4)
+    reservatio_to_delete.shift.personCapacity += math.ceil(reservatio_to_delete.numberOfDiners)
+    reservatio_to_delete.shift.save()
+    reservatio_to_delete.delete()
+    return JsonResponse(
+        {"message": "Reservation succesfully deleted" }, status = 200       
     )
 
 

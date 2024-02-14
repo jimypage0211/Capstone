@@ -11,5 +11,6 @@ urlpatterns = [
 
     #API calls
     path("getAllRestaurants", views.getAllRestaurants, name="getAllRestaurants"),
-    path("getReservations", views.getReservations, name="getReservations")
+    path("getReservations", views.getReservations, name="getReservations"),
+    path("cancel", views.cancel, name="cancel")
 ]

@@ -2,25 +2,35 @@
 {% load static %}
 
 {% block body %} 
-    <h1>{{restaurant.name}}</h1>    
-    {% if alert == "Full" %}
-        <div class="alert alert-danger" role="alert">
-            This restaurant has no more tables available
-        </div>
-    {% elif alert == "personFull" %}
-        <div class="alert alert-danger" role="alert">
-            This restaurant has no availability for that many dinners
-        </div>
-    {% endif %}
-    <form action="/reserve/{{restaurant.id}}" method="post">
+<h1 class="text-center">{{ restaurant.name }}</h1>    
+{% if alert == "Full" %}
+    <div class="alert alert-danger" role="alert">
+        This restaurant has no more tables available.
+    </div>
+{% elif alert == "personFull" %}
+    <div class="alert alert-danger" role="alert">
+        This restaurant has no availability for that many diners.
+    </div>
+
+{% endif %}
+<div class="container mt-5">
+    <form action="/reserve/{{restaurant.id}}" method="post" class="form-group">
         {% csrf_token %}
-        <label for="numberOfDiners">Number of diners</label>
-        <input type="number" name="numberOfDiners">
-        <label for="Time"></label>
-        <input type="datetime-local" name="time">
-        <input type="submit" value="Save">
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <label for="numberOfDiners">Number of diners</label>
+                <input type="number" class="form-control" name="numberOfDiners" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="time">Time</label>
+                <input type="datetime-local" class="form-control" name="time" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Reserve</button>
     </form>
+</div>
 {% endblock %}
+
 
 {% block script %}
     <script src=""></script>

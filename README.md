@@ -8,8 +8,9 @@ Build an app that allows you to book your preferred dining spots! This app enabl
 Upon completing a reservation, the app will send an email to the user with the booking details. Users will have access to their current reservations as well as a history of their past bookings.
 
 ## Distinctiveness and Complexity
-
-I believe my project distinctly differs from others in this course by incorporating email interactions with users and managing date, time, and timezone awareness, functionalities not covered in previous course projects.
+- Unique Functionality: Your project focuses on a specific and practical application—restaurant reservation—which differentiates it from the more common project themes such as blogs, social media platforms, and e-commerce sites.
+- Email Integration: Implementing email notifications for reservations adds a layer of real-world application and user communication that is not commonly found in the projects developed throughout the course.
+- Date, Time, and Timezone Management: Handling reservations involves complex logic related to dates, times, and potentially timezones, which requires a deeper understanding of Python and Django's capabilities in managing time-sensitive data.
 
 ## Structure
 ### Pages  

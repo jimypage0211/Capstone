@@ -22,9 +22,8 @@ I believe my project is distant enough from the projects done in this course sin
 **Reservations Page:** This is where the user can check their active or past reservations. Here the user can also cancel an ongoing reservation or unarchive a past reservation.
 
 ### Files
-This project contains the structure of a default Django app
-In addition, it contains the following folders:
-**Static folder:** This contains a folder called reservations that contains:
+This project contains the structure of a default Django app. In addition, it contains the following folders:
+- **Static folder:** This contains a folder called reservations that contains:
 - allRestaurants.js: The JS code for fetching and structuring the restaurant information
 - reservation.js: The JS code for fetching and structuring the reservations information
 - styles.css: In addition to bootstraps, this contains some styling code for the whole app

@@ -110,6 +110,7 @@ class Reservation(models.Model):
         self.shift.personCapacity += math.ceil(
             self.numberOfDiners
         )
+        self.shift.save()
         self.active = False
 
     def serialize (self):

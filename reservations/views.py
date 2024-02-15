@@ -40,19 +40,25 @@ def reserve(request, id):
     else:
         restaurant = Restaurant.objects.get(id=id)
         shifts = Shift.objects.filter(restaurant=restaurant)
-        # Getting time from reserve form
+        # Getting time from reserve form and convert it to a timezone aware time
         timestr = request.POST["time"]
         parsed_time = datetime.datetime.strptime(timestr, "%H:%M").time()
-
         current_date = datetime.date.today()
         mydatetime = datetime.datetime.combine(current_date, parsed_time)
-
+        current_time = timezone.localtime(timezone.now()).time()
         numberOfDiners = request.POST["numberOfDiners"]
 
         # Opening and closing times of all restaurants
-
         min = time(10, 0)
-        max = time(22, 0)
+        max = time(23, 0)
+        
+        # If reservation time is earlier than current time retunr to reserve with an alert
+        if parsed_time <= current_time:
+            return render(
+                request,
+                "reservations/reserve.html",
+                {"restaurant": restaurant, "alert": "Old time"},
+            )
 
         # if restaurant is open
         if min <= parsed_time <= max:
@@ -62,7 +68,6 @@ def reserve(request, id):
                 shiftSubs = int(shift.shiftRange[0:2])
                 timeSubs = int(timestr[0:2])
                 if shiftSubs == timeSubs or shiftSubs == timeSubs - 1:
-
                     # Check if shift for that restaurant is full
                     if shift.isFull:
                         return render(
@@ -75,7 +80,7 @@ def reserve(request, id):
                         return render(
                             request,
                             "reservations/reserve.html",
-                            {"restaurant": restaurant, "alert": "personFull"},
+                            {"restaurant": restaurant, "alert": "PersonFull"},
                         )
                     # Save Reservation
                     reservationToSave = Reservation(
@@ -100,6 +105,7 @@ def reserve(request, id):
                 request, "reservations/index.html", {"alert": "Reservation success"}
             )
         else:
+            # If restaurant is closed return to reserve page with an alert
             return render(
                 request,
                 "reservations/reserve.html",

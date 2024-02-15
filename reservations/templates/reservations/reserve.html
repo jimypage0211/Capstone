@@ -7,13 +7,17 @@
     <div class="alert alert-danger" role="alert">
         This restaurant has no more tables available.
     </div>
-{% elif alert == "personFull" %}
+{% elif alert == "PersonFull" %}
     <div class="alert alert-danger" role="alert">
         This restaurant has no availability for that many diners.
     </div>
 {% elif alert == "Closed" %}
     <div class="alert alert-danger" role="alert">
         The restaurant is closed at that time.
+    </div>
+{% elif alert == "Old time" %}
+    <div class="alert alert-danger" role="alert">
+        The time you want to make the reservation for already passed.
     </div>
 {% endif %}
 <div class="container mt-5">

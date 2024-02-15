@@ -46,8 +46,8 @@ This app is made with a blend of Django views and Vanilla JS. The Django views I
 ## Installation and Running
 This project doesn't need any additional dependencies.
 You only need to install Django and run the following commands:
-``` python manage.py makemigrations ```
-Then:
-``` python manage.py migrate ```
-Last:
-```python manage.py runserver ```
+```
+python manage.py makemigrations
+python manage.py migrate 
+python manage.py runserver
+```

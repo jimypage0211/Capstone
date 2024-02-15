@@ -23,9 +23,9 @@ I believe my project is distant enough from the projects done in this course sin
 
 ### Files
 This project contains the structure of a default Django app. In addition, it contains the following folders:
-- **Static folder:** This contains a folder called reservations that contains:
-- allRestaurants.js: The JS code for fetching and structuring the restaurant information
-- reservation.js: The JS code for fetching and structuring the reservations information
-- styles.css: In addition to bootstraps, this contains some styling code for the whole app
+* **Static folder:** This contains a folder called reservations that contains:
+  - allRestaurants.js: The JS code for fetching and structuring the restaurant information
+  - reservation.js: The JS code for fetching and structuring the reservations information
+  - styles.css: In addition to bootstraps, this contains some styling code for the whole app
 
 

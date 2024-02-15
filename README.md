@@ -13,4 +13,20 @@ I believe my project is distant enough from the projects done in this course sin
 
 ## Structure
 ### Pages
-**AllRestaurants Page:** This is where the user goes when its logged in. This page will show you the list of all possible restaurants to book 
+**Log-In and Register Pages:** This is where the user can log in or register as a new user.
+
+**AllRestaurants Page:** This is where the user goes when it's logged in. This page will show you the list of all possible restaurants to book. Each restaurant has a link to reserve the table(s) you need for your diners. If the user is not logged in, once it clicks a reserve link, the app will redirect the user to the log-in page.
+
+**Reserve Page:** On this page the user will select the number of diners and the time of the reservation. The user will get a series of alerts depending on if the information on the reservation is correct. For example, if the user selects a time for which the restaurant is closed, it will get an alert.
+
+**Reservations Page:** This is where the user can check their active or past reservations. Here the user can also cancel an ongoing reservation or unarchive a past reservation.
+
+### Files
+This project contains the structure of a default Django app
+In addition, it contains the following folders:
+**Static folder:** This contains a folder called reservations that contains:
+- allRestaurants.js: The JS code for fetching and structuring the restaurant information
+- reservation.js: The JS code for fetching and structuring the reservations information
+- styles.css: In addition to bootstraps, this contains some styling code for the whole app
+
+

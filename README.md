@@ -10,3 +10,7 @@ When the reservation is done it will send the user an email with the reservation
 ## Distinctiveness and Complexity
 
 I believe my project is distant enough from the projects done in this course since it handles email interaction with the users and manages dates, times, and timezone awareness logic which wasn't used in the previous projects for the course.
+
+## Structure
+### Pages
+**AllRestaurants Page:** This is where the user goes when its logged in. This page will show you the list of all possible restaurants to book 

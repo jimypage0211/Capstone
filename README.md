@@ -47,9 +47,9 @@ This app is made with a blend of Django views and Vanilla JS. The Django views I
 This project doesn't need any additional dependencies.
 You only need to install Django and run the following commands:
 ```
-`python manage.py makemigrations`
-`python manage.py migrate` 
-`python manage.py runserver`
+python manage.py makemigrations
+python manage.py migrate 
+python manage.py runserver
 ```
 ## Notes
 This app sends confirmation emails after a reservation is made. The confirmation emails come from the Gmail address "jimyprestaurants@gmail.com".

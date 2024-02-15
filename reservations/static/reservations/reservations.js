@@ -33,7 +33,7 @@ function loadAll() {
         const cancel_reservation = document.createElement("button");
         cancel_reservation.className = "btn btn-danger";
         reservation.append(activeTag);
-        reservation.append(document.createElement("br")) 
+        reservation.append(document.createElement("br"));
         // If reservation is active assign cancel button
         if (element.active) {
           activeTag.innerHTML = "Active";
@@ -47,7 +47,7 @@ function loadAll() {
           activeTag.innerHTML = "Inactive";
           const unarchive = document.createElement("button");
           unarchive.className = "btn btn-danger";
-          unarchive.innerHTML = "Unarchive"
+          unarchive.innerHTML = "Unarchive";
           unarchive.onclick = function () {
             unarchive_reserve(element.id);
           };
@@ -70,25 +70,45 @@ function cancel_reserve(id) {
     if (!response.ok) {
       console.log("Something went wrong");
     } else {
-      // Reload the window to update status of the reservations
-      location.reload();
+      // Alert to show the reservation was deleted
+      let okAlert = document.createElement("div")     
+      okAlert.innerHTML = `
+        <div class="alert alert-info" role="alert">
+          Your reservation was succesfully deleted
+        </div>
+        `;
+      document.querySelector("#reservations").prepend(okAlert);
+      // Reload the window to update status of the reservations after 3 secs to show the alert
+      setTimeout(function(){
+        location.reload();
+      }, 3000)
     }
   });
 }
 
 // Function called by the unarchive button. Given the reservation id, fetch it and unarchive it
 function unarchive_reserve(id) {
-    fetch("/unarchive", {
-      method: "POST",
-      body: JSON.stringify({
-        id: id,
-      }),
-    }).then((response) => {
-      if (!response.ok) {
-        console.log("Something went wrong");
-      } else {
-        // Reload the window to update status of the reservations
+  fetch("/unarchive", {
+    method: "POST",
+    body: JSON.stringify({
+      id: id,
+    }),
+  }).then((response) => {
+    if (!response.ok) {
+      console.log("Something went wrong");
+    } else {
+      // Alert to show the reservation was unarchived
+      let okAlert = document.createElement("div");
+      okAlert.innerHTML = `
+        <div class="alert alert-warning" role="alert">
+          Your reservation was succesfully unarchived
+        </div>
+        `;
+      document.querySelector("body").prepend(okAlert);
+      // Reload the window to update status of the reservations after 3 secs to show the alert
+      setTimeout(function(){
         location.reload();
-      }
-    });
-  }
+      }, 3000)
+    }
+  });
+}

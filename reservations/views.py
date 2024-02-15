@@ -94,7 +94,7 @@ def reserve(request, id):
                     # Send confirmation email
                     send_mail(
                         f"{restaurant.name} Reservation",
-                        f"Your reservation for {restaurant.name} at {parse_datetime} was succesfully booked",
+                        f"Your reservation for {restaurant.name} at {parsed_time} was succesfully booked",
                         "jimypRestaurants@gmail.com",
                         [f"{request.user.email}"],
                         fail_silently=False,

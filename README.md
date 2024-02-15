@@ -46,11 +46,11 @@ This app is made with a blend of Django views and Vanilla JS. The Django views I
 ## Installation and Running
 This project doesn't need any additional dependencies.
 You only need to install Django and run the following commands:
-
+```
 `python manage.py makemigrations`
 `python manage.py migrate` 
 `python manage.py runserver`
-
+```
 ## Notes
 This app sends confirmation emails after a reservation is made. The confirmation emails come from the Gmail address "jimyprestaurants@gmail.com".
 This email account is used for the sole educational purpose of handling reservation confirmations and nothing more. To connect to the Gmail servers an app authentication password is required and is set up in the settings.py file of the project.

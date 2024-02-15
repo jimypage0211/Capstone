@@ -1,4 +1,6 @@
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
+
 from django.db import models
 import math
 
@@ -107,9 +109,8 @@ class Reservation(models.Model):
             "restaurant_name": self.restaurant.name,
             "numberOfDiners": self.numberOfDiners,
             "shift": self.shift.shiftRange,
-            "time": self.time.strftime("%b %d, %Y, %I:%M %p"),
+            "time": timezone.localtime(self.time).strftime("%b %d, %Y, %I:%M %p"),
             "active": self.active,
-            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
+            "timestamp": timezone.localtime(self.timestamp).strftime("%b %d %Y, %I:%M %p"),
         }
-
 

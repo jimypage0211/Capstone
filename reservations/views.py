@@ -112,24 +112,25 @@ def reserve(request, id):
                 {"restaurant": restaurant, "alert": "Closed"},
             )
 
-
+#API call method to get all reservations
 def getReservations(request):
     if request.method != "GET":
         return JsonResponse({"error": "GET request required."}, status=400)
-
     reservations = request.user.reservations.all()
     serialized = []
+    #For every reservation make the time timezone aware
     for reservation in reservations:
         reservation_time = timezone.localtime(reservation.time).time()
         current_time = timezone.localtime(timezone.now()).time()
-        print(reservation_time)
+        #Check if it already passed to mark as inactive
         if reservation_time < current_time:
+            #Deactivate method restore shift capacities and mark them as inactive
             reservation.deactivate()
         serialized.append(reservation.serialize())
 
     return JsonResponse(serialized, safe=False)
 
-
+#API call method to get all restaurants
 def getAllRestaurants(request):
     if request.method != "GET":
         return JsonResponse({"error": "GET request required."}, status=400)
@@ -138,22 +139,27 @@ def getAllRestaurants(request):
         [restaurant.serialize() for restaurant in restaurants], safe=False
     )
 
-
+#API call method to cancel a reservation
 def cancel(request):
+    #Get the desired reservation
     data = json.loads(request.body)
     reservation_id = data.get("id")
     reservation_to_delete = Reservation.objects.get(id=reservation_id)
+    #Restore the table and person capacities to the designated shift
     reservation_to_delete.shift.tablesCapacity += math.ceil(
         reservation_to_delete.numberOfDiners / 4
     )
     reservation_to_delete.shift.personCapacity += math.ceil(
         reservation_to_delete.numberOfDiners
     )
+    #Save the shift capacities and delete the reservation
     reservation_to_delete.shift.save()
     reservation_to_delete.delete()
     return JsonResponse({"message": "Reservation succesfully deleted"}, status=200)
 
+#API call to unarchive an inactive reservation (delete it)
 def unarchive(request):
+    #Get the desired reservation (There is no need to restore shift capacities since its done when they deactivate)
     data = json.loads(request.body)
     reservation_id = data.get("id")
     reservation_to_delete = Reservation.objects.get(id=reservation_id)

@@ -109,15 +109,15 @@ h1 {
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .card-img-top {
-        height: 40vw; /* Adjust image height for smaller devices */
+        height: 40vw; 
     }
 }
 
 @media (max-width: 768px) {
     .container {
-        padding: 15px; /* Increase padding on smaller screens */
+        padding: 15px; 
     }
     h1 {
-        font-size: 24px; /* Adjust the font size for smaller screens */
+        font-size: 24px; 
     }
 }

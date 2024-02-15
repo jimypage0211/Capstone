@@ -1,13 +1,13 @@
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
-
 from django.db import models
 import math
 
-
+# User default class
 class User(AbstractUser):    
     pass
-        
+
+# This is the shift strings from where the shft ranges will be created
 shiftsArray = [
     "10:00 - 12:00",
     "12:00 - 14:00",
@@ -17,7 +17,7 @@ shiftsArray = [
     "20:00 - 22:00",
     "22:00 - 24:00"
 ]
-        
+
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)
     address =  models.CharField(max_length=255)
@@ -28,8 +28,10 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name   
     
+    # Every time a restaurant is created, all the shifts for the restaurant are automatically created
     def save (self, *args, **kwargs):
         super(Restaurant,self).save(*args, **kwargs)
+        # Create shift using the shit ranges array
         for shift in shiftsArray:
             shiftToSave = Shift(
                 shiftRange = shift,
@@ -37,7 +39,7 @@ class Restaurant(models.Model):
             )
             shiftToSave.save()
 
-    
+    # Serialize method to send the model info to JS
     def serialize (self):        
         reservations = self.reservations.all()        
         reservations_Ids = []        
@@ -57,6 +59,7 @@ class Restaurant(models.Model):
 class Shift (models.Model):    
     shiftRange = models.CharField(max_length=14)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name= "shifts")   
+    # Capacities are by default set to -1 to differentiate the creation from the edition 
     personCapacity = models.IntegerField(default = -1)
     tablesCapacity = models.IntegerField(default = -1)
     isFull = models.BooleanField(default = False, editable = False)
@@ -66,12 +69,14 @@ class Shift (models.Model):
         return f"{self.restaurant} - {self.shiftRange}"
     
     def save (self, *args, **kwargs):
+        # When we save the shift we make sure its a new shift to assing capacities from restaurant
         if self.personCapacity == -1:
             self.personCapacity = self.restaurant.personCapacity
             self.tablesCapacity = self.restaurant.tablesCapacity    
-        
+        # If not means we are editing the shift and not creating it
         super(Shift,self).save(*args, **kwargs)
     
+    # Serialize method to send the model info to JS
     def serialize (self):
         return {
             "shiftRange": self.shiftRange,
@@ -90,10 +95,13 @@ class Reservation(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default = True)
     
+    # When we save a reservation we adjust the table and person capacities to the respective shift
     def save (self, *args, **kwargs):
         shiftToReserve = Shift.objects.get(id = self.shift.id)
         shiftToReserve.personCapacity = shiftToReserve.personCapacity - self.numberOfDiners
+        # We assume all restaurant tables are for 4 person
         shiftToReserve.tablesCapacity = shiftToReserve.tablesCapacity - math.ceil(self.numberOfDiners/4)
+        # If there is no more room in the shift set the shift to full
         if shiftToReserve.tablesCapacity == 0:
             shiftToReserve.isFull = True
         shiftToReserve.save()
@@ -103,7 +111,9 @@ class Reservation(models.Model):
     def __str__(self):
         return f"{self.client.username} - {self.restaurant.name}"
     
+    # This method is used for when the reservation time expires it deaactivate it
     def deactivate (self):
+        # Restore the shift reservation to their previos caps
         self.shift.tablesCapacity += math.ceil(
             self.numberOfDiners / 4
         )

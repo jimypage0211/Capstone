@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 function loadAll(){
+    // Fetch all restaurants
     fetch("/getAllRestaurants")
         .then(response => {
             if (!response.ok){
@@ -12,6 +13,7 @@ function loadAll(){
         })
         .then(jsonResponse =>{
             const restaurants_div = document.querySelector("#allRestaurants")
+            // For each reastaurant create its structure
             jsonResponse.forEach(element => {
                 restaurants_div.innerHTML += `
                 <div class="col-md-3 mb-4">

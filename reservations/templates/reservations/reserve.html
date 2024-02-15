@@ -3,6 +3,7 @@
 
 {% block body %} 
 <h1 class="text-center">{{ restaurant.name }}</h1>    
+{% comment %} Alerts giving to the user when something went wrong went creating reservation {% endcomment %}
 {% if alert == "Full" %}
     <div class="alert alert-danger" role="alert">
         This restaurant has no more tables available.
@@ -21,6 +22,7 @@
     </div>
 {% endif %}
 <div class="container mt-5">
+    {% comment %} Reservation forom structure {% endcomment %}
     <form action="/reserve/{{restaurant.id}}" method="post" class="form-group">
         {% csrf_token %}
         <div class="form-row">

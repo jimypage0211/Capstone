@@ -118,7 +118,7 @@ def getReservations(request):
         current_time = timezone.localtime(timezone.now()).time()
         print(reservation_time)
         if reservation_time < current_time:
-            reservation.active = False
+            reservation.deactivate()
         serialized.append(reservation.serialize())
 
     return JsonResponse(serialized, safe=False)
@@ -136,18 +136,24 @@ def getAllRestaurants(request):
 def cancel(request):
     data = json.loads(request.body)
     reservation_id = data.get("id")
-    reservatio_to_delete = Reservation.objects.get(id=reservation_id)
-    reservatio_to_delete.shift.tablesCapacity += math.ceil(
-        reservatio_to_delete.numberOfDiners / 4
+    reservation_to_delete = Reservation.objects.get(id=reservation_id)
+    reservation_to_delete.shift.tablesCapacity += math.ceil(
+        reservation_to_delete.numberOfDiners / 4
     )
-    reservatio_to_delete.shift.personCapacity += math.ceil(
-        reservatio_to_delete.numberOfDiners
+    reservation_to_delete.shift.personCapacity += math.ceil(
+        reservation_to_delete.numberOfDiners
     )
-    reservatio_to_delete.shift.save()
-    reservatio_to_delete.delete()
+    reservation_to_delete.shift.save()
+    reservation_to_delete.delete()
     return JsonResponse({"message": "Reservation succesfully deleted"}, status=200)
 
-
+def unarchive(request):
+    data = json.loads(request.body)
+    reservation_id = data.get("id")
+    reservation_to_delete = Reservation.objects.get(id=reservation_id)
+    reservation_to_delete.delete()
+    return JsonResponse({"message": "Reservation succesfully unarchived"}, status=200)
+    
 def login_view(request):
     if request.method == "POST":
 

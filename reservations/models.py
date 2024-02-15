@@ -102,6 +102,15 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f"{self.client.username} - {self.restaurant.name}"
+    
+    def deactivate (self):
+        self.shift.tablesCapacity += math.ceil(
+            self.numberOfDiners / 4
+        )
+        self.shift.personCapacity += math.ceil(
+            self.numberOfDiners
+        )
+        self.active = False
 
     def serialize (self):
         return {

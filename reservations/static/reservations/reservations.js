@@ -39,6 +39,13 @@ function loadAll() {
           reservation.append(cancel_reservation);
         } else {
           activeTag.innerHTML = "Inactive";
+          const unarchive = document.createElement("button");
+          unarchive.className = "btn btn-danger";
+          unarchive.innerHTML = "Unarchive"
+          unarchive.onclick = function () {
+            unarchive_reserve(element.id);
+          };
+          reservation.append(unarchive);
         }
         reservationsDiv.append(reservation);
       });
@@ -59,3 +66,18 @@ function cancel_reserve(id) {
     }
   });
 }
+
+function unarchive_reserve(id) {
+    fetch("/unarchive", {
+      method: "POST",
+      body: JSON.stringify({
+        id: id,
+      }),
+    }).then((response) => {
+      if (!response.ok) {
+        console.log("Something went wrong");
+      } else {
+        location.reload();
+      }
+    });
+  }

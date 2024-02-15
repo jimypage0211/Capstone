@@ -51,3 +51,10 @@ python manage.py makemigrations
 python manage.py migrate 
 python manage.py runserver
 ```
+## Notes
+This app sends confirmation emails after a reservation is made. The confirmation emails come from the Gmail address "jimyprestaurants@gmail.com.
+This email account is used for the sole educational purpose of handling reservations and nothing more. To connect to the Gmail servers an app authentication password was required and is set up in the settings.py file of the project.
+
+# Thanks for providing these awesome courses!!!
+
+

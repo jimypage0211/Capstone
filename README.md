@@ -4,12 +4,12 @@ This is my Final Project for the course CS50’s Web Programming with Python and
 
 ## Description
 
-Build an app that lets you book where you want to eat today! This app will let you log in and choose from a series of previously added restaurants and let you make a booking for the place you want to reserve.
-When the reservation is done it will send the user an email with the reservation info for the booking. The user will also have access to the current reservation it holds and the history of reservations made.
+Build an app that allows you to book your preferred dining spots! This app enables users to log in, choose from a list of previously added restaurants, and make reservations at their desired locations.
+Upon completing a reservation, the app will send an email to the user with the booking details. Users will have access to their current reservations as well as a history of their past bookings.
 
 ## Distinctiveness and Complexity
 
-I believe my project is distant enough from the projects done in this course since it handles email interaction with the users and manages dates, times, and timezone awareness logic which wasn't used in the previous projects for the course.
+I believe my project distinctly differs from others in this course by incorporating email interactions with users and managing date, time, and timezone awareness, functionalities not covered in previous course projects.
 
 ## Structure
 ### Pages  
@@ -27,7 +27,7 @@ I believe my project is distant enough from the projects done in this course sin
 This project has the structure of a default Django app. In addition, it contains the following folders:
 * **Static folder:** This contains a folder called reservations that contains:
   - allRestaurants.js: The JS code for fetching and structuring the restaurant information
-  - reservation.js: The JS code for fetching and structuring the reservations information
+  - reservation.js: The JS code for fetching and structuring the reservation information
   - styles.css: In addition to bootstraps, this contains some styling code for the whole app
 
 * **Templates:** This contains a folder called reservations that contain the templates for the pages mentioned in the Pages section
@@ -41,7 +41,7 @@ This app is made with a blend of Django views and Vanilla JS. The Django views I
 - getAllRestaurants: This view finds all the restaurants and returns them to the page via JSON
 - cancel: This view is for canceling the reservation
 - archive: This view is for unarchiving a past reservation
-- login, logout, and register: User authentiication
+- login, logout, and register: User authentication
 
 ## Installation and Running
 This project doesn't need any additional dependencies.
@@ -53,7 +53,7 @@ python manage.py runserver
 ```
 ## Notes
 This app sends confirmation emails after a reservation is made. The confirmation emails come from the Gmail address "jimyprestaurants@gmail.com.
-This email account is used for the sole educational purpose of handling reservations and nothing more. To connect to the Gmail servers an app authentication password was required and is set up in the settings.py file of the project.
+This email account is used for the sole educational purpose of handling reservation confirmations and nothing more. To connect to the Gmail servers an app authentication password is required and is set up in the settings.py file of the project.
 
 # Thanks for providing these awesome courses!!!
 
